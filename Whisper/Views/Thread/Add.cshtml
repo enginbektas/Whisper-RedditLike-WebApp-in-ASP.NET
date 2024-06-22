@@ -1,0 +1,75 @@
+﻿@model Whisper.Models.ThreadViewModel;
+
+<body>
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title"></h4>
+                    </div>
+
+                    <input hidden id="id" value="" type="text" class="form-control" style="border-left:2px solid orange;margin-right:15px;">
+
+                    <div class="row" style="padding: 5px; padding-left: 30px;">
+                        <label style="font-size: 16px; font-weight: bold;">Title</label>
+                        <input id="title" value="" type="text" class="form-control" style="border-left: 2px solid orange; margin-right: 15px; resize: vertical;" oninput="autoResize(this)">
+                    </div>
+
+                    <div class="row" style="padding: 5px; padding-left: 30px;">
+                        <label style="font-size: 16px; font-weight: bold;">Description</label>
+                        <textarea id="description" value="" type="text" class="form-control" style="border-left:2px solid orange;margin-right:15px; width:95%; resize: vertical;" oninput="autoResize(this)">
+                        </textarea>
+                    </div>
+
+                    <input hidden id="communityId" value="@Model.Community.Id" type="text" class="form-control" style="border-left:2px solid orange;margin-right:15px;">
+
+
+                </div>
+            </div>
+
+
+            <div style="padding-left: 30px;">
+                <p class="add btn btn-primary">Create</p>
+            </div>
+
+    </section>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.add').click(function () {
+
+            var id = $('#id').val();
+            var title = $('#title').val();
+            var description = $('#description').val();
+            var communityId = $('#communityId').val();
+
+            var thread = {
+                _id: id,
+                Title: title,
+                Description: description,
+                CommunityId: communityId
+            };
+            $.ajax({
+                url: '/Thread/Add',
+                type: 'POST', // or 'GET' depending on your server-side implementation
+                data: { thread: thread }, // Include the stack object in the data property
+                success: function (response) {
+                    // Handle the response from the server
+                    console.log("x" + response.message);
+                    document.location.href = '/Thread/Detail/' + response.threadId
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.log("y" + error);
+                }
+            });
+        });
+    });
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Reset the height to auto
+        textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to match the content
+    }
+</script>

@@ -1,0 +1,58 @@
+﻿@model Whisper.Models.UserModels.UsersViewModel;
+
+<body>
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title"></h4>
+                    </div>
+
+                    <input hidden id="id" value="@Model.User.Id" type="text" class="form-control" style="border-left:2px solid orange;margin-right:15px;">
+
+                    <div class="row" style="padding: 5px; padding-left: 30px;">
+                        <label style="font-size: 16px; font-weight: bold;">Email</label>
+                        <input id="email" value="" type="text" class="form-control" style="border-left:2px solid orange;margin-right:15px;">
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="padding-left: 30px;">
+                <p class="add btn btn-primary">Update</p>
+            </div>
+     
+
+
+    </section>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.add').click(function () {
+
+            var email = $('#email').val();
+            var id = $('#id').val();
+
+            var user = {
+                Email: email,
+                Id: id
+            };
+            $.ajax({
+                url: '/Users/Edit',
+                type: 'POST', // or 'GET' depending on your server-side implementation
+                data: { user: user }, // Include the stack object in the data property
+                success: function (response) {
+                    // Handle the response from the server
+                    console.log("x" + response.message);
+                    document.location.href = '/Users/Detail/' + response.userId
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.log("y" + error);
+                }
+            });
+        });
+    });
+</script>

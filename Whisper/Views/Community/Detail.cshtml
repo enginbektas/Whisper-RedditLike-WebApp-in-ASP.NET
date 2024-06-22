@@ -1,0 +1,125 @@
+﻿@model Whisper.Models.CommunityViewModel;
+@using Whisper.Entities;
+
+@if (User.Identity.Name == Model.Community.Creator.UserName)
+{
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style="font-weight:bold;">Admin Pannel</h4>
+                    </div>
+                    <p hidden id="communityName" value="@Model.Community.Name">@Model.Community.Name</p>
+
+                    <div class="row" style="padding: 5px; padding-left: 30px;">
+                        <h4>Add a Moderator</h4>
+                    </div>
+
+                    <div class="row" style="padding: 5px; padding-left: 30px;">
+                        <label for="lname" style="font-size: 16px; font-weight: bold;">UserName:</label>
+                        <input type="text" id="userName" style="margin-left:10px;"><br><br>
+                        <input id="submit" type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+
+                   
+                </div>
+
+
+
+                <div class="card">
+              
+                <div style="padding-left: 20px;">
+                        <h3>Moderators</h3>
+                </div>
+                @foreach (User mod in Model.Community.Moderators)
+                {
+                    <div class="row" style="padding:5px; padding-left:45px;">
+
+                        <a href="@Url.Action("Detail", "Users", new { userName = mod.UserName })" />
+                        @mod.UserName
+
+                    </div>
+                }
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<body>
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style="font-size: 32px; font-weight: bold; padding-top: 30px;">@Model.Community.Name</h4>
+
+                    </div>
+                    <div class="card-header">
+                        <h4 class="card-title" style="font-size: 18px;padding-bottom: 20px; padding-left:10px;">@Model.Community.Description</h4>
+                    </div>
+
+                    <div class="row justify-content-end" style="padding-top: 5px; padding-right: 55px; padding-bottom: 20px">
+                        <div class="col-auto">
+                            <a href="@Url.Action("Add", "Thread", new { CommunityId = Model.Community.Id })" class="btn btn-primary">Create a Post</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="row" style="padding-top:15px; padding-left:45px">
+                        <h3>Posts</h3>
+                    </div>
+
+                    @{
+                        int postCount = Model.Community.Threads.Count;
+                    }
+                    @foreach (Thread thread in Model.Community.Threads)
+                    {
+                        <div class="row" style="padding-top:5px; padding-left:55px; padding-bottom: 10px">
+
+                            <a href="@Url.Action("Detail", "Thread", new { Id = thread.Id })" />
+                            @thread.Title
+
+                        </div>
+                        @if (postCount > 1)
+                        {
+                            <hr class="comment-divider" style="border: none;border-top: 1px solid black;margin:5px;padding-bottom:5px; padding-left:30px;padding-right:30px;">
+                        }
+                        postCount--;
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#submit').click(function () {
+
+            var userName = $('#userName').val();
+            var communityName = $('#communityName').text();
+            console.log(communityName);
+            $.ajax({
+                url: '/Community/AddModerator',
+                type: 'POST', // or 'GET' depending on your server-side implementation
+                data: { userName: userName, communityName: communityName }, // Include the stack object in the data property
+                success: function (response) {
+                    // Handle the response from the server
+                    console.log("x" + response.succeeded);
+                    if (response.succeeded) {
+                        location.reload();
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.log("y" + error);
+                }
+            });
+        });
+    });
+</script>

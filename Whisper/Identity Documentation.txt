@@ -1,0 +1,45 @@
+﻿Rol ekleme ve getleme işlemleri genelde userManager ve roleManager ile yapılıyor.
+
+
+
+
+Rol ekleme işlemi:
+
+IdentityResult IdentityResult = await _roleManager.CreateAsync(new Role { Name = "seo_expert" });
+
+
+
+
+
+Kullanıcıya rol atama işlemi:
+
+await _userManager.AddToRoleAsync(user, "admin");
+
+
+
+
+
+Razor Page'de kullanıcıya erişmek için bunları sayfanın üstüne eklememiz gerekiyor.
+
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+Daha sonra Razor Page'de kullanıcıya erişmek için bu kodu kullanıyoruz.
+
+@HttpContextAccessor.HttpContext.User.Identity.Name
+
+
+
+
+
+Sayfalara rol bazında yetkilendirme koymak için, controllerların fonksiyonlarına şu kodu ekliyorum.
+
+[Authorize(Roles = MBCRMRoles.Seo_Expert_RoleString)]
+
+
+kullanıcının rollerini getirme:
+var rolesList = await _userManager.GetRolesAsync(user);
+
+
+Giriş yapan kullanıcının rollerinin listesini bulmak için bir extension yazdık. kullanımı c# koduyla şu şekilde:
+var roles = ((ClaimsIdentity)User.Identity).Roles();

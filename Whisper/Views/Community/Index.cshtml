@@ -1,0 +1,40 @@
+﻿@model CommunityViewModel
+
+<body>
+    <section id="responsive-datatable">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header border-bottom">
+                        <h4 class="card-title">Communities</h4>
+                        <div style="margin:10px">
+                            <a class="btn btn-primary" href="@Url.Action("Add", "Community")">
+                                Create a Community
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-datatable">
+                        <table class="dt-responsive table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Communities)
+                                {
+                                    <tr>
+                                        <th>
+                                        <a href="@Url.Action("Detail", "Community", new { Id = item.Id })" />
+                                        @item.Name
+                                        </th>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>

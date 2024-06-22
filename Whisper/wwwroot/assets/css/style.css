@@ -1,0 +1,57 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+
+/* Dropdown /Backlink/Index  */
+nav .drop-down {
+	list-style: none;
+	overflow: hidden;
+	height: 132px;
+	background-color: #7367f0;
+	font-family: Arial;
+	width: 150px;
+	margin: 0 auto;
+	padding: 0;
+	border-radius: 5px;
+	text-align: center;
+	-webkit-transition: height 0.3s ease;
+	transition: height 0.3s ease;
+}
+
+	nav .drop-down.closed {
+		height: 40px;
+	}
+
+	nav .drop-down li {
+		border-bottom: 5px solid #7367f0;
+	}
+
+		nav .drop-down li a {
+			display: block;
+			color: #ecf0f1;
+			text-decoration: none;
+			padding: 10px;
+		}
+
+		nav .drop-down li:first-child a:after {
+			content: "\25BC";
+			float: right;
+			margin-left: -30px;
+			margin-right: 5px;
+		}
+/* Dropdown /Backlink/Index END  */
+
+
+.hidepopup{
+	display:none !important;
+}

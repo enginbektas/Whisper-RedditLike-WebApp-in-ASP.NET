@@ -1,0 +1,97 @@
+﻿@model Whisper.Models.ThreadViewModel;
+@using Whisper.Entities;
+
+<body>
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style="font-size: 32px; font-weight: bold; padding-top: 30px;"> @Model.Thread.Title</h4>
+
+                    </div>
+                    <div class="card-header">
+                        <h3 class="card-title" style="font-size: 18px;padding-bottom: 20px;padding-left:10px;"> @Model.Thread.Description</h3>
+
+                    </div>
+                </div>
+                <div class="card">
+                    <h4 hidden id="threadId" class="card-title" value="@Model.Thread.Id">@Model.Thread.Id</h4>
+                    <div class="row" style="padding:5px; padding-left:30px; padding-top:15px;">
+                        <textarea class="myComment" style="width:95%; resize: vertical;" oninput="autoResize(this)"></textarea>
+                        
+                    </div>
+
+                    <div class="row" style="padding:10px; padding-right:80px; display: flex; justify-content: flex-end;">
+                        <p class="createComment btn btn-primary" style="padding: 10px; padding-left: 15px;">Post a Comment</p>
+                    </div>
+
+                    <div class="row" >
+                        <h3 style="font-size: 18px;padding-bottom: 20px;padding:5px; padding-left:30px;">Comments</h3>
+                    </div>
+                    @{
+                        int commentCount = Model.Thread.Comments.Count;
+                    }
+                    @foreach (Comment comment in Model.Thread.Comments)
+                    {
+                        <div class="row" style="padding: 5px;">
+                            <div class="comment-container">
+                                <div class="comment-header">
+                                    <h5 class="comment-author" style="padding-top:5px; padding-left:30px">@comment.User.UserName</h5>
+                            </div>
+
+                                <div class="comment-body" style="padding-top:5px; padding-left:45px">
+                                    <p class="comment-description">@comment.Description</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if(commentCount > 1)
+                        {
+                            <hr class="comment-divider" style="border: none;border-top: 1px solid black;margin: 1px;padding-bottom:5px">
+                        }
+                        commentCount--;
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.createComment').click(function () {
+
+            var description = $('.myComment').val();
+            var threadId = $('#threadId').text();
+
+            var comment = {
+                Description: description,
+                ThreadId: threadId
+            };
+            $.ajax({
+                url: '/Comment/Add',
+                type: 'POST', // or 'GET' depending on your server-side implementation
+                data: { comment: comment }, // Include the stack object in the data property
+                success: function (response) {
+                    // Handle the response from the server
+                    console.log("x" + response.succeeded);
+                    if (response.succeeded) {
+                        location.reload();
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.log("y" + error);
+                }
+            });
+        });
+    });
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+</script>

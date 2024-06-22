@@ -1,0 +1,41 @@
+﻿@model Whisper.Models.UserModels.UsersViewModel;
+@using Whisper.Entities;
+
+<body>
+    <section class="bootstrap-select">
+        <div class="row" id="mainRow">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@Model.User.UserName</h4>
+
+                    </div>
+                    <div class="card-header">
+                        <h4 class="card-title">@Model.User.Email</h4>
+                    </div>
+
+                    @if (Model.User.UserName == User.Identity.Name)
+                    {
+                        <div class="row" style="padding:5px; padding-left: 30px;">
+                            <a class="btn btn-primary" href="@Url.Action("Edit", "Users", new { userName = Model.User.UserName })">Edit Profile</a>
+                            
+                        </div>
+                    }
+                    <div class="row" style="padding:5px; padding-left:30px;">
+                    @Model.User.UserName's Posts
+                    </div>
+
+                    @foreach (Thread thread in Model.User.Threads)
+                    {
+                        <div class="row" style="padding:5px; padding-left:45px;">
+
+                            <a href="@Url.Action("Detail", "Thread", new { Id = thread.Id })" />
+                            @thread.Title
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
